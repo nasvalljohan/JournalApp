@@ -9,8 +9,20 @@ import UIKit
 
 class ExistingEntryViewController: UIViewController {
 
+    @IBOutlet weak var lblTible: UILabel!
+    @IBOutlet weak var lblDate: UILabel!
+    @IBOutlet weak var txtContent: UITextView!
+    
+    var journalEntry: JournalEntry?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if let journalEntry = journalEntry {
+            lblTible.text = journalEntry.title
+            lblDate.text = journalEntry.date
+            txtContent.text = journalEntry.content
+        }
 
         // Do any additional setup after loading the view.
     }

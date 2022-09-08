@@ -11,13 +11,20 @@ class JournalTableViewController: UITableViewController {
     
     var JournalCell = "JournalCell"
     
+    @IBOutlet var myTableView: UITableView!
     var journal = Journal()
+    let segueToEntry: String = "segueToEntry"
+    let segueToExisting: String = "segueToExisting"
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         journal.addEntry(entry: JournalEntry(content: "Contents", title: "Title"))
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        myTableView.reloadData()
     }
 
     // MARK: - Table view data source
@@ -44,7 +51,7 @@ class JournalTableViewController: UITableViewController {
         
         //Skapar en config om index inte är null
         if let entry = journal.getEntryAt(index: indexPath.row){
-            content.text = "\(entry.content) \(entry.date)"
+            content.text = "\(entry.date) \(entry.title) "
         }
         
         //Sätter contentconfiguration till den config vi skapat
@@ -88,14 +95,31 @@ class JournalTableViewController: UITableViewController {
     }
     */
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        
+        switch segue.identifier {
+        case segueToEntry:
+            if let dVC = segue.destination as? CreateEntryViewController {
+                dVC.journal = self.journal
+            }
+             break
+        case segueToExisting:
+            if let dVC = segue.destination as? ExistingEntryViewController,
+                let selectedCellIndex = myTableView.indexPathForSelectedRow?.row,
+                let selectedEntry = journal.getEntryAt(index: selectedCellIndex){
+                
+                dVC.journalEntry = selectedEntry
+            }
+             break
+            
+        default: return
+        }
+        
     }
-    */
+    
 
 }

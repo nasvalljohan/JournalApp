@@ -24,7 +24,6 @@ class Journal {
             return
         }
         journalEntries.append(entry)
-        
     }
     
     func getEntryAt(index: Int) -> JournalEntry?{
@@ -34,11 +33,5 @@ class Journal {
         }else {
             return nil
         }
-
     }
-    
-    
-    
-    
-    
 }
