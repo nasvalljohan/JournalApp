@@ -68,32 +68,21 @@ class JournalTableViewController: UITableViewController {
     }
     */
 
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+    
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let remove = UIContextualAction(style: .destructive, title: "Ta bort?", handler: {(action, view, completion) in
+            self.journal.removeEntry(index: indexPath.row)
+            self.myTableView.deleteRows(at: [indexPath], with: .fade)
+        })
+        let add = UIContextualAction(style: .normal, title: "Ändra", handler: {(action, view, completion) in
+            self.performSegue(withIdentifier: self.segueToExisting, sender: self)
+        })
+        add.backgroundColor = UIColor.init(red: 0/255, green: 255/255, blue: 0/255, alpha: 1)
+        let actions = UISwipeActionsConfiguration(actions: [remove, add])
+        
+        return actions
     }
-    */
 
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
 
     
     // MARK: - Navigation
@@ -108,18 +97,15 @@ class JournalTableViewController: UITableViewController {
             }
              break
         case segueToExisting:
+ 
             if let dVC = segue.destination as? ExistingEntryViewController,
-                let selectedCellIndex = myTableView.indexPathForSelectedRow?.row,
-                let selectedEntry = journal.getEntryAt(index: selectedCellIndex){
-                
-                dVC.journalEntry = selectedEntry
+               let cell = sender as? UITableViewCell,
+               let indexPath = myTableView.indexPath(for: cell),
+               let entry = journal.getEntryAt(index: indexPath.row){
+                dVC.journalEntry = entry
             }
              break
-            
         default: return
         }
-        
     }
-    
-
 }
